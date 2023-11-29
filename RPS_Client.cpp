@@ -32,7 +32,7 @@ int main() {
 
     SOCKET clientSocket;
     struct sockaddr_in serverAddr;
-
+    //しし
     // 社掴 持失
     clientSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (clientSocket == INVALID_SOCKET) {
