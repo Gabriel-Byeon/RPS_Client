@@ -10,16 +10,16 @@
 #define SERVER_IP "127.0.0.1"
 
 void sendChoice(SOCKET clientSocket, Choice clientChoice) {
-    // ¸Ş½ÃÁö Çì´õ »ı¼º
+    // ë©”ì‹œì§€ í—¤ë” ìƒì„±
     MessageHeader header;
     header.messageType = MessageType::CHOICE_RESPONSE;
     header.messageSize = sizeof(Choice);
-    header.option = 0; // °¡À§¹ÙÀ§º¸ °ÔÀÓ
+    header.option = 0; // ê°€ìœ„ë°”ìœ„ë³´ ê²Œì„
 
-    // ¸Ş½ÃÁö Çì´õ Àü¼Û
+    // ë©”ì‹œì§€ í—¤ë” ì „ì†¡
     send(clientSocket, reinterpret_cast<char*>(&header), sizeof(MessageHeader), 0);
 
-    // ¸Ş½ÃÁö º»¹® Àü¼Û
+    // ë©”ì‹œì§€ ë³¸ë¬¸ ì „ì†¡
     send(clientSocket, reinterpret_cast<char*>(&clientChoice), sizeof(Choice), 0);
 }
 
@@ -32,8 +32,8 @@ int main() {
 
     SOCKET clientSocket;
     struct sockaddr_in serverAddr;
-    //¤·¤·
-    // ¼ÒÄÏ »ı¼º
+    
+    // ì†Œì¼“ ìƒì„±
     clientSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (clientSocket == INVALID_SOCKET) {
         std::cerr << "Error creating client socket" << std::endl;
@@ -41,12 +41,12 @@ int main() {
         return -1;
     }
 
-    // ¼­¹ö ÁÖ¼Ò ¼³Á¤
+    // ì„œë²„ ì£¼ì†Œ ì„¤ì •
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_port = htons(PORT);
     inet_pton(AF_INET, SERVER_IP, &serverAddr.sin_addr);
 
-    // ¼­¹ö¿¡ ¿¬°á
+    // ì„œë²„ì— ì—°ê²°
     if (connect(clientSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
         std::cerr << "Error connecting to server" << std::endl;
         closesocket(clientSocket);
@@ -56,19 +56,19 @@ int main() {
 
     std::cout << "Connected to server" << std::endl;
 
-    // »ç¿ëÀÚ¿¡°Ô °¡À§¹ÙÀ§º¸ ¼±ÅÃ ¹Ş±â
+    // ì‚¬ìš©ìì—ê²Œ ê°€ìœ„ë°”ìœ„ë³´ ì„ íƒ ë°›ê¸°
     Choice clientChoice;
     std::cout << "Enter your choice (0: Rock, 1: Paper, 2: Scissors): ";
     std::cin >> clientChoice;
 
-    // ¼±ÅÃ Àü¼Û
+    // ì„ íƒ ì „ì†¡
     sendChoice(clientSocket, clientChoice);
 
-    // °á°ú ¼ö½Å
+    // ê²°ê³¼ ìˆ˜ì‹ 
     GameData gameResult;
     recv(clientSocket, reinterpret_cast<char*>(&gameResult), sizeof(GameData), 0);
 
-    // °ÔÀÓ °á°ú Ãâ·Â
+    // ê²Œì„ ê²°ê³¼ ì¶œë ¥
     if (gameResult.attack == 0) {
         std::cout << "Server wins!" << std::endl;
     }
@@ -76,7 +76,7 @@ int main() {
         std::cout << "Client wins!" << std::endl;
     }
 
-    // ¼ÒÄÏ ´İ±â
+    // ì†Œì¼“ ë‹«ê¸°
     closesocket(clientSocket);
     WSACleanup();
 
