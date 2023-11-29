@@ -6,7 +6,7 @@
 
 #pragma comment(lib, "ws2_32.lib")
 
-#define PORT 8080
+#define PORT 9000
 #define SERVER_IP "127.0.0.1"
 
 void sendChoice(SOCKET clientSocket, Choice clientChoice) {
